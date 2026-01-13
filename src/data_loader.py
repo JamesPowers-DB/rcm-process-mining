@@ -33,34 +33,31 @@ class RCMDataLoader:
         self._connection = None
 
     def _get_connection(self):
-        """Get Databricks SQL connection using secret scope credentials."""
+        """Get Databricks SQL connection using environment variables."""
         if self._connection is None:
+            # Get credentials from environment variables
+            server_hostname = os.environ.get("DATABRICKS_HOST", "").replace("https://", "")
+            http_path = os.environ.get("DATABRICKS_HTTP_PATH")
+            access_token = os.environ.get("DATABRICKS_TOKEN")
+
+            if not all([server_hostname, http_path, access_token]):
+                raise ValueError(
+                    "Missing required environment variables. Please set:\n"
+                    "  - DATABRICKS_HOST (e.g., https://your-workspace.cloud.databricks.com)\n"
+                    "  - DATABRICKS_HTTP_PATH (e.g., /sql/1.0/warehouses/abc123)\n"
+                    "  - DATABRICKS_TOKEN (your personal access token)"
+                )
+
             try:
-                # Retrieve credentials from Databricks Secret Scope
-                # In Databricks Apps, secrets are accessed via environment variables
-                # that are automatically populated from the secret scope
-                server_hostname = os.environ.get("DATABRICKS_HOST")
-                http_path = os.environ.get("DATABRICKS_HTTP_PATH")
-                access_token = os.environ.get("DATABRICKS_TOKEN")
-
-                if not all([server_hostname, http_path, access_token]):
-                    # Fallback to workspace client for local development
-                    print(
-                        "Warning: Using WorkspaceClient authentication. "
-                        "Set DATABRICKS_HOST, DATABRICKS_HTTP_PATH, and DATABRICKS_TOKEN "
-                        "environment variables for production."
-                    )
-                    # For Databricks Apps, the connection is handled automatically
-                    return None
-
+                print(f"Connecting to Databricks at {server_hostname}...")
                 self._connection = sql.connect(
                     server_hostname=server_hostname,
                     http_path=http_path,
                     access_token=access_token,
                 )
+                print("✓ Connected successfully!")
             except Exception as e:
-                print(f"Error connecting to Databricks: {e}")
-                self._connection = None
+                raise RuntimeError(f"Failed to connect to Databricks: {e}")
 
         return self._connection
 
@@ -74,27 +71,20 @@ class RCMDataLoader:
         Returns:
             DataFrame with query results
         """
-        try:
-            # Try using PySpark if available (running in Databricks)
-            from pyspark.sql import SparkSession
-
-            spark = SparkSession.builder.getOrCreate()
-            spark_df = spark.sql(query)
-            return spark_df.toPandas()
-        except ImportError:
-            # Fall back to SQL connector
-            connection = self._get_connection()
-            if connection:
-                cursor = connection.cursor()
-                cursor.execute(query)
-                result = cursor.fetchall()
-                columns = [desc[0] for desc in cursor.description]
-                cursor.close()
-                return pd.DataFrame(result, columns=columns)
-            else:
-                raise RuntimeError(
-                    "Cannot execute query: No Spark session or SQL connection available"
-                )
+        # For local development, use SQL connector instead of Spark
+        connection = self._get_connection()
+        if connection:
+            cursor = connection.cursor()
+            cursor.execute(query)
+            result = cursor.fetchall()
+            columns = [desc[0] for desc in cursor.description]
+            cursor.close()
+            return pd.DataFrame(result, columns=columns)
+        else:
+            raise RuntimeError(
+                "Cannot execute query: SQL connection not available. "
+                "Please check your DATABRICKS_HOST, DATABRICKS_HTTP_PATH, and DATABRICKS_TOKEN environment variables."
+            )
 
     def load_data(
         self,

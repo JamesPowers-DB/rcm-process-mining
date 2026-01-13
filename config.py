@@ -46,22 +46,25 @@ class Config:
         Raises:
             ValueError if required configuration is missing
         """
+        missing = []
+        
         if not cls.DATABRICKS_HOST:
-            raise ValueError(
-                "DATABRICKS_HOST environment variable is required. "
-                "Set it to your Databricks workspace URL."
-            )
-
+            missing.append("DATABRICKS_HOST (e.g., https://your-workspace.cloud.databricks.com)")
+        
         if not cls.DATABRICKS_HTTP_PATH:
-            raise ValueError(
-                "DATABRICKS_HTTP_PATH environment variable is required. "
-                "Set it to your SQL warehouse HTTP path."
-            )
-
+            missing.append("DATABRICKS_HTTP_PATH (e.g., /sql/1.0/warehouses/abc123)")
+        
         if not cls.DATABRICKS_TOKEN:
+            missing.append("DATABRICKS_TOKEN (your personal access token)")
+        
+        if missing:
             raise ValueError(
-                "DATABRICKS_TOKEN environment variable is required. "
-                "Set it to your Databricks access token."
+                "Missing required environment variables:\n  - " + 
+                "\n  - ".join(missing) +
+                "\n\nTo set them, run:\n" +
+                "  export DATABRICKS_HOST='https://your-workspace.cloud.databricks.com'\n" +
+                "  export DATABRICKS_HTTP_PATH='/sql/1.0/warehouses/your-warehouse-id'\n" +
+                "  export DATABRICKS_TOKEN='your-token'"
             )
 
         return True

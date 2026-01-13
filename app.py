@@ -15,15 +15,13 @@ from src.visualization import GraphBuilder
 from src.glossary import ACTIVITY_GLOSSARY
 from config import config
 
-# Validate configuration
-try:
-    config.validate()
-except ValueError as e:
-    print(f"Configuration error: {e}")
-    print("Please set required environment variables. See .env.example for details.")
-
-# Initialize Databricks workspace client
-w = WorkspaceClient(token=config.DATABRICKS_TOKEN,auth_type="pat")
+# Initialize Databricks workspace client (only if token is available)
+w = None
+if config.DATABRICKS_TOKEN:
+    try:
+        w = WorkspaceClient(token=config.DATABRICKS_TOKEN, auth_type="pat")
+    except Exception as e:
+        print(f"Warning: Could not initialize Databricks WorkspaceClient: {e}")
 
 # Initialize Dash app
 app = Dash(
