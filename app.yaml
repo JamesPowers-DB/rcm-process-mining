@@ -13,24 +13,6 @@ runtime:
 # Entry point
 command: ["python", "app.py"]
 
-# Environment variables (references to secret scope)
-env:
-  - name: DATABRICKS_HOST
-    valueFrom:
-      secretKeyRef:
-        scope: rcm-demo-secrets
-        key: databricks-host
-  - name: DATABRICKS_HTTP_PATH
-    valueFrom:
-      secretKeyRef:
-        scope: rcm-demo-secrets
-        key: databricks-http-path
-  - name: DATABRICKS_TOKEN
-    valueFrom:
-      secretKeyRef:
-        scope: rcm-demo-secrets
-        key: databricks-token
-
 # Resource allocation
 resources:
   memory: "4Gi"
