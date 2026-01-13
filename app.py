@@ -23,7 +23,7 @@ except ValueError as e:
     print("Please set required environment variables. See .env.example for details.")
 
 # Initialize Databricks workspace client
-w = WorkspaceClient()
+w = WorkspaceClient(token=config.DATABRICKS_TOKEN,auth_type="pat")
 
 # Initialize Dash app
 app = Dash(
@@ -439,7 +439,7 @@ def display_node_details(node_data):
 
 if __name__ == "__main__":
     # For local development
-    app.run_server(
+    app.run(
         debug=config.APP_DEBUG,
         host=config.APP_HOST,
         port=config.APP_PORT,

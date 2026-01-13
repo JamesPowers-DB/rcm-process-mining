@@ -9,6 +9,7 @@ from typing import Optional
 import pandas as pd
 from databricks.sdk import WorkspaceClient
 from databricks import sql
+from config import config
 import os
 
 
@@ -28,7 +29,7 @@ class RCMDataLoader:
         self.schema = schema
         self.table = table
         self.full_table_name = f"{catalog}.{schema}.{table}"
-        self.w = WorkspaceClient()
+        self.w = WorkspaceClient(token=config.DATABRICKS_TOKEN,auth_type="pat")
         self._connection = None
 
     def _get_connection(self):

@@ -13,10 +13,11 @@ runtime:
 # Entry point
 command: ["python", "app.py"]
 
-# Resource allocation
-resources:
-  memory: "4Gi"
-  cpu: "2"
+env:
+  - name: DATABRICKS_HTTP_PATH
+    valueFrom: http-path
+  - name: DATABRICKS_TOKEN
+    valueFrom: databricks-token
 
 # Port configuration
 ports:
