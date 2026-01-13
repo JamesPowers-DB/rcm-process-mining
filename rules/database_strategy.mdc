@@ -1,0 +1,32 @@
+---
+alwaysApply: true
+---
+
+## Database (PostgreSQL)
+
+### Connection Management
+- Use SQLAlchemy connection pooling
+- Configure pool size based on expected concurrency
+- Always use context managers or session handling in services
+- opt to for unixtime when storing timestamps
+
+### Migrations
+- All schema changes MUST go through Alembic migrations
+- Never modify database schema directly
+- Migration naming: `YYYY_MM_DD_descriptive_name.py`
+
+### Models
+```python
+# Use declarative base
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from datetime import datetime
+
+class Base(DeclarativeBase):
+    pass
+
+class Example(Base):
+    __tablename__ = 'examples'
+    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+```

@@ -1,0 +1,65 @@
+---
+alwaysApply: true
+---
+## Frontend
+
+### CSS Framework: Milligram
+- Include Milligram CDN: `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.min.css">`
+- Create `custom.css` for Databricks branding overrides only
+
+### Databricks Branding
+```css
+/* custom.css - Databricks brand colors */
+:root {
+    --databricks-coral: #FF3621;
+    --databricks-dark: #1B1B1D;
+    --databricks-gray: #333333;
+    --databricks-light-gray: #F5F5F5;
+    --databricks-ext-gray-navigation: #303F47;
+    --databricks-ext-gray-text: #5A6F77;
+    --databricks-ext-gray-lines: #DCE0E2;
+    --databricks-ext-lava-dark: #801C17;
+    --databricks-ext-lava-medium: #FF3621;
+    --databricks-ext-lava-light: #FF9E94;
+    --databricks-ext-green-dark: #095A35;
+    --databricks-ext-green-medium: #00A972;
+    --databricks-ext-green-light: #70C4AB;
+    --databricks-ext-blue-dark: #04355D;
+    --databricks-ext-blue-medium: #2272B4;
+    --databricks-ext-blue-light: #8ACAFF;
+
+}
+
+/* Override Milligram primary color */
+button,
+.button,
+input[type='submit'],
+input[type='button'] {
+    background-color: var(--databricks-coral);
+    border-color: var(--databricks-coral);
+}
+
+button:hover,
+.button:hover {
+    background-color: #E62E1C;
+    border-color: #E62E1C;
+}
+
+/* Typography - use system fonts as fallback */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: var(--databricks-gray);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--databricks-dark);
+}
+```
+
+### Color usage and best practices
+- Do use color in ways that appear balanced and intentional. Using tints and shades of analogous colors can help add depth to your compositions.
+- Don’t mix colors that have low contrast due to overly similar levels of brightness.
+- Don’t use colored text on backgrounds that produce low contrast. Readability is important. Please follow accessibility standards for contrast. 
+
+### Font
+- Any text that seems to be a block of code or refer to code, use mono font 'Roboto'.

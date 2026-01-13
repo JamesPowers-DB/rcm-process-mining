@@ -1,0 +1,13 @@
+---
+alwaysApply: false
+---
+## Error Handling
+
+- Importand: try to fix things at the cause, not the symptom.
+- Provide context for what the original issue was.
+
+
+### Databricks API Errors
+- Wrap Databricks SDK calls in try-except blocks
+- Handle specific exceptions (rate limiting, authentication, etc.)
+- Provide user-friendly error messages

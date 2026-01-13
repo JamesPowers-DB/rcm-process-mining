@@ -1,0 +1,41 @@
+---
+alwaysApply: true
+---
+
+## Logging 
+
+### Configuration
+```python
+import logging
+from logging.handlers import RotatingFileHandler
+
+if not app.debug:
+    file_handler = RotatingFileHandler('logs/app.log', maxBytes=10240, backupCount=10)
+    file_handler.setFormatter(logging.Formatter(
+        '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+    ))
+    file_handler.setLevel(logging.INFO)
+    app.logger.addHandler(file_handler)
+```
+
+### What to Log
+- All Databricks API calls (request/response)
+- Database operations (queries, migrations)
+- Authentication attempts
+- Errors and exceptions with full stack traces
+
+## Code Style
+
+### Python
+- Follow PEP 8
+- Use type hints for function signatures
+- Use Black for code formatting (line length: 100)
+- Use isort for import organization
+- Use pylint or flake8 for linting
+
+### Naming Conventions
+- Functions/variables: `snake_case`
+- Classes: `PascalCase`
+- Constants: `UPPER_SNAKE_CASE`
+- Private methods: `_leading_underscore`
+

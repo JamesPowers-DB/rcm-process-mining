@@ -1,0 +1,25 @@
+---
+alwaysApply: true
+---
+
+
+## Databricks Integration
+
+### Authentication
+- Use environment variables for Databricks credentials
+- Required env vars: `DATABRICKS_HOST`, `DATABRICKS_TOKEN`
+- Use Databricks SDK's built-in authentication patterns
+
+### SDK Usage
+```python
+from databricks.sdk import WorkspaceClient
+
+# Initialize once per application
+w = WorkspaceClient()
+```
+
+### Best Practices
+- Cache Databricks API responses when appropriate
+- Implement retry logic for transient failures
+- Use async operations for long-running Databricks jobs
+- Log all Databricks API calls for debugging

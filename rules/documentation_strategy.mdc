@@ -1,0 +1,22 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+## README files
+- keep a shot README.md that summarizes the purpose of the project.
+- specify high level technologies used and their purpose.
+- specify how to get started using the application.
+- After each request, determine if this needs to be changed, and update it if so.
+
+## Documentation
+
+### Code Comments
+- Use docstrings for all functions, classes, and modules
+- Follow Google or NumPy docstring style
+- Explain "why" not "what" in inline comments
+
+### API Documentation
+- Document all API endpoints with request/response examples
+- Use Flask-RESTX or similar for auto-generated API docs (optional)

@@ -1,0 +1,29 @@
+{
+  "name": "rcm-process-mining-demo",
+  "version": "1.0.0",
+  "description": "RCM Process Mining Demo - Interactive visualization of healthcare revenue cycle management workflows",
+  "author": "Your Organization",
+  "runtime": {
+    "type": "python",
+    "version": "3.11"
+  },
+  "entrypoint": "app.py",
+  "port": 8080,
+  "secrets": {
+    "scope": "rcm-demo-secrets",
+    "keys": [
+      "databricks-host",
+      "databricks-http-path",
+      "databricks-token"
+    ]
+  },
+  "permissions": {
+    "catalogs": ["rcm_demo"],
+    "schemas": ["rcm_demo.process_mining"],
+    "tables": ["rcm_demo.process_mining.rcm_events"]
+  },
+  "resources": {
+    "memory": "4Gi",
+    "cpu": 2
+  }
+}

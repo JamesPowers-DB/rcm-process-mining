@@ -1,0 +1,14 @@
+---
+alwaysApply: true
+---
+
+## Performance
+
+### Database Optimization
+- Use database indexes on frequently queried columns
+- Implement pagination for list endpoints
+- Use eager loading to avoid N+1 queries: `db.session.query(Model).options(joinedload(Model.relation))`
+
+### Caching
+- Consider Flask-Caching for expensive operations
+- Cache Databricks metadata that changes infrequently

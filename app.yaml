@@ -1,0 +1,62 @@
+# Databricks Apps Configuration
+# This file defines the configuration for deploying the RCM Process Mining Demo as a Databricks App
+
+# App metadata
+name: rcm-process-mining-demo
+display_name: RCM Process Mining Demo
+description: Interactive process mining visualization for healthcare revenue cycle management
+
+# Runtime configuration
+runtime:
+  python_version: "3.11"
+  
+# Entry point
+command: ["python", "app.py"]
+
+# Environment variables (references to secret scope)
+env:
+  - name: DATABRICKS_HOST
+    valueFrom:
+      secretKeyRef:
+        scope: rcm-demo-secrets
+        key: databricks-host
+  - name: DATABRICKS_HTTP_PATH
+    valueFrom:
+      secretKeyRef:
+        scope: rcm-demo-secrets
+        key: databricks-http-path
+  - name: DATABRICKS_TOKEN
+    valueFrom:
+      secretKeyRef:
+        scope: rcm-demo-secrets
+        key: databricks-token
+
+# Resource allocation
+resources:
+  memory: "4Gi"
+  cpu: "2"
+
+# Port configuration
+ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+
+# Health checks
+healthCheck:
+  path: /
+  port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+# Permissions
+permissions:
+  - resource: catalog
+    name: rcm_demo
+    privilege: USE
+  - resource: schema
+    name: rcm_demo.process_mining
+    privilege: USE
+  - resource: table
+    name: rcm_demo.process_mining.rcm_events
+    privilege: SELECT
